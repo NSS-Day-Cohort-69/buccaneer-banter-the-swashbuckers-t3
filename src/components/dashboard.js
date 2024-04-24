@@ -16,7 +16,6 @@ export default function Dashboard()
 
     const getFavoritePirates = (id) =>
     {
-        debugger
         getFollowers(id).then(res => res.json()).then(follows => 
         {
             setScallyWags(follows)

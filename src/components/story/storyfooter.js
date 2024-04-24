@@ -22,12 +22,7 @@ const unfollow = async (followerId, followingId, action) =>
 {
     var response = await getFollowers(followerId, followingId)
     var follower = (await response.json())[0]
-    deleteFollower(follower.id).then(() => 
-    {
-        debugger
-        action(parseInt(followerId))
-    }
-    )
+    deleteFollower(follower.id).then(() => action(parseInt(followerId)))
 }
 
 
