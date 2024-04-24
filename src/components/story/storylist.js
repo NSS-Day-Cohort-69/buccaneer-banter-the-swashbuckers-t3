@@ -1,18 +1,22 @@
 import { useState, useEffect, createContext } from 'react'
 import Story from './story'
+import { getStories } from '@/services'
 
 export const StoryContext = createContext()
 
-const StoryList = ({ myFavoriteScallywags, getFavoritePirates }) => {
+const StoryList = ({ myFavoriteScallywags, getFavoritePirates }) =>
+{
     const [stories, setStories] = useState([])
 
-    const fetchStories = async () => {
-        const res = await fetch('http://localhost:8088/stories?_expand=pirate')
+    const fetchStories = async () =>
+    {
+        const res = await getStories()
         const data = await res.json()
         setStories(data)
     }
 
-    useEffect(() => {
+    useEffect(() =>
+    {
         fetchStories()
     }, [])
 

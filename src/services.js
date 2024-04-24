@@ -14,7 +14,7 @@ export const getFollowers = async (followerId = null, pirateId = null) =>
         fetchString += `pirateId=${pirateId}`
     }
 
-    return await fetch(fetchString).then(res => res.json())
+    return fetch(fetchString)
 }
 
 export const getPirates = (name = null, ship = null) =>
@@ -30,22 +30,22 @@ export const getPirates = (name = null, ship = null) =>
         fetchString += `ship=${ship}`
     }
 
-    return fetch(fetchString).then(res => res.json())
+    return fetch(fetchString)
 }
 
 export const getPirateById = (id) =>
 {
-    return fetch(`${APIstring}/pirates/${id}`).then(res => res.json())
+    return fetch(`${APIstring}/pirates/${id}`)
 }
 
 export const getStories = () =>
 {
-    return fetch(`${APIstring}/stories`).then(res => res.json())
+    return fetch(`${APIstring}/stories`)
 }
 
 export const deleteFollower = (id) =>
 {
-    fetch(`${APIstring}/followers/${id}`,
+    return fetch(`${APIstring}/followers/${id}`,
         {
             method: "DELETE"
         })
