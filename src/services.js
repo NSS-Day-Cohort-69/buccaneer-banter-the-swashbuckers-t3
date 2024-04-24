@@ -1,6 +1,6 @@
 const APIstring = "https://localhost:7201"
 
-const getFollowers = (followerId = null, pirateId = null) =>
+export const getFollowers = async (followerId = null, pirateId = null) =>
 {
     let fetchString = `${APIstring}/followers?`
 
@@ -11,13 +11,13 @@ const getFollowers = (followerId = null, pirateId = null) =>
 
     if(pirateId != null)
     {
-        fetchString += `followerId=${followerId}`
+        fetchString += `pirateId=${pirateId}`
     }
 
-    return fetch(fetchString).then(res => res.json())
+    return await fetch(fetchString).then(res => res.json())
 }
 
-const getPirates = (name = null, ship = null) =>
+export const getPirates = (name = null, ship = null) =>
 {
     let fetchString = `${APIstring}/pirates?`
 
@@ -33,17 +33,17 @@ const getPirates = (name = null, ship = null) =>
     return fetch(fetchString).then(res => res.json())
 }
 
-const getPirateById = (id) =>
+export const getPirateById = (id) =>
 {
     return fetch(`${APIstring}/pirates/${id}`).then(res => res.json())
 }
 
-const getStories = () =>
+export const getStories = () =>
 {
     return fetch(`${APIstring}/stories`).then(res => res.json())
 }
 
-const deleteFollower = (id) =>
+export const deleteFollower = (id) =>
 {
     fetch(`${APIstring}/followers/${id}`,
         {
@@ -51,7 +51,7 @@ const deleteFollower = (id) =>
         })
 }
 
-const postFollower = (follower) =>
+export const postFollower = (follower) =>
 {
     return fetch(`${APIstring}/followers`,
         {
