@@ -2,30 +2,31 @@ import StoryList from '../components/story/storylist'
 import ShipMates from '../components/shipmates'
 import WantedPoster from '../components/profile/wantedposter'
 import { useEffect, useState } from 'react'
+import { getFollowers, getPirateById } from '@/services'
 
-export default function Dashboard() {
+export default function Dashboard()
+{
     const [currentPirate, setCurrentPirate] = useState({ id: 0 })
     const [myFavoriteScallywags, setScallyWags] = useState([])
 
-    const getPirate = (id) => {
-        fetch(`http://localhost:8088/pirates/${id}`)
-            .then(response => response.json())
-            .then((res) => {
-                setCurrentPirate(res)
-            })
+    const getPirate = (id) =>
+    {
+        getPirateById(id).then(res => res.json()).then((pirate => { setCurrentPirate(pirate) }))
     }
 
-    const getFavoritePirates = (id) => {
-        fetch(`http://localhost:8088/followers?followerId=${id}&_expand=pirate`)
-            .then(response => response.json())
-            .then((res) => {
-                setScallyWags(res)
-            })
+    const getFavoritePirates = (id) =>
+    {
+        getFollowers(id).then(res => res.json()).then(follows => 
+        {
+            setScallyWags(follows)
+        })
     }
 
-    useEffect(() => {
+    useEffect(() =>
+    {
         const pirate_id = localStorage.getItem("pirateId") ?? 0
-        if (pirate_id > 0) {
+        if(pirate_id > 0)
+        {
             getPirate(pirate_id)
             getFavoritePirates(pirate_id)
         }

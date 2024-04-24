@@ -1,23 +1,28 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import styles from "./login.module.css"
+import { getPirates } from '@/services'
 
-const Login = ({ onLogin }) => {
+const Login = ({ onLogin }) =>
+{
     const [name, setName] = useState()
     const [shipName, setShipName] = useState()
     const router = useRouter()
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = async (event) =>
+    {
         event.preventDefault()
 
-        const response = await fetch(`http://localhost:8088/pirates?name=${name}&ship=${shipName}`)
+        const response = await getPirates(name, shipName)
 
-        if (!response.ok) {
+        if(!response.ok)
+        {
             alert('Invalid credentials')
             return
         }
 
         const pirate = await response.json()
+
         onLogin()
         localStorage.setItem('pirateId', pirate[0].id)
         router.push('/')

@@ -4,53 +4,54 @@ import * as Toast from '@radix-ui/react-toast'
 import styles from "./storyfooter.module.css"
 import { useContext, useEffect, useRef, useState } from 'react'
 import { StoryContext } from './storylist.js'
+import { deleteFollower, getFollowers, postFollower } from '@/services'
 
-const follow = (follower, following, action) => {
-    fetch(`http://localhost:8088/followers`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+const follow = (follower, following, action) =>
+{
+    postFollower(
+        {
             followerId: parseInt(follower),
             pirateId: parseInt(following)
-        })
-    })
+        }
+    )
         .then(response => response.json())
         .then(() => action(parseInt(follower)))
 }
 
-const unfollow = (follower, following, action) => {
-    fetch(`http://localhost:8088/followers?followerId=${follower}&pirateId=${following}`)
-        .then(response => response.json())
-        .then(matchArray => {
-            const matchId = matchArray[0].id
-
-            fetch(`http://localhost:8088/followers/${matchId}`, {
-                method: "DELETE"
-            }).then(() => action(parseInt(follower)))
-        })
+const unfollow = async (followerId, followingId, action) =>
+{
+    var response = await getFollowers(followerId, followingId)
+    var follower = (await response.json())[0]
+    deleteFollower(follower.id).then(() => action(parseInt(followerId)))
 }
 
 
-const StoryFooter = ({ myFavoriteScallywags, getFavoritePirates }) => {
+const StoryFooter = ({ myFavoriteScallywags, getFavoritePirates }) =>
+{
     const { story } = useContext(StoryContext)
     const [open, setOpen] = useState(false)
     const timerRef = useRef(0)
     const pirate_id = localStorage.getItem("pirateId")
 
-    useEffect(() => {
+    useEffect(() =>
+    {
         return () => clearTimeout(timerRef.current)
     }, [])
 
 
-    const showFollow = () => {
+    const showFollow = () =>
+    {
         const alreadyFollow = myFavoriteScallywags.find(rel => rel.pirateId === story.pirate.id)
-        if (!alreadyFollow) {
+        if(!alreadyFollow)
+        {
             return <button
-                onClick={() => {
+                onClick={() =>
+                {
                     follow(pirate_id, story.pirate.id, getFavoritePirates)
                     setOpen(false);
                     window.clearTimeout(timerRef.current);
-                    timerRef.current = window.setTimeout(() => {
+                    timerRef.current = window.setTimeout(() =>
+                    {
                         setOpen(true);
                     }, 100);
                 }}
@@ -81,7 +82,8 @@ const StoryFooter = ({ myFavoriteScallywags, getFavoritePirates }) => {
                     asChild
                     altText="view now"
                     className={styles.ToastAction}
-                    onClick={(e) => {
+                    onClick={(e) =>
+                    {
                         e.preventDefault();
                         unfollow(pirate_id, story.pirate.id, getFavoritePirates)
                         setOpen(false)
